@@ -18,64 +18,21 @@
         </li>
     </script>
 
-    <script>
-        (function( $, Backbone )
-        {
-            // Données et models
-            /* Post { id:1, title:"example", date:"01/01/1990", content:"Example", img:"example.jpg"} */
-            var PostModel = Backbone.Model.extend
-            (
-                    {
-                        defaults:
-                        {
-                            title:"",
-                            date:"01/01/2000",
-                            content:"",
-                            img:"default.jpg"
-                        }
-                    }
-            );
-            /* PostCollection */
-            var PostsCollection = Backbone.Collection.extend(
-                    {
-                        model : PostModel
-                    }
-            );
+    <!-- Classes -->
+    <script src="rl/model/Post.js" ></script>
+    <script src="rl/view/Post.js" ></script>
 
-            // Vues
-            var PostView = Backbone.View.extend(
-                    {
-                        tagName : "li"
-                    }
-            );
-            var PostListView = Backbone.View.extend(
-                    {
-                        collection: null,
-                        template: _.template( $( "#post-template" ).html() ),
-                        initialize: function()
-                        {
-                            this.listenTo( this.collection, "add", this.render );
-                            this.render();
-                        },
-                        render: function()
-                        {
-                            var self = this;
-                            this.$el.empty();
-                            this.collection.each(
-                                    function( post )
-                                    {
-                                        self.$el.append(
-                                                self.template( post.toJSON() )
-                                        )
-                                        console.log(post.toJSON());
-                                    }
-                            )
-                        }
-                    }
-            )
+    <!-- Démarrage de l'appli -->
+    <script>
+        // Namespace
+        var rl = rl || {};
+
+        (function( $, rl )
+        {
 
             // Données mockups correspondant à la liste des posts
             var posts;
+
 
             /**
              * Document ready event
@@ -86,7 +43,10 @@
                  */
                 var main = function()
                 {
-                    posts = new PostsCollection();
+                    posts = new rl.models.PostsCollection();
+
+                    // Desactiver le message de chargement
+                    $('#loading').remove();
 
                     // Renseigne les éléments de la liste
                     var postListView = new PostListView
@@ -112,24 +72,6 @@
                         img:"vin_canard.jpg"
                     }));
 
-                    // Desactiver le message de chargement
-                    $('#loading').remove();
-
-                    // Met à jour les éléments de la liste
-                    var $post_list = $('#post_list');
-                    posts.each
-                    (
-                            function( post )
-                            {
-                                $post_list.append(
-                                        "<li>" +
-                                        "<a href='post.php?id="+ post.get( "id" ) +"'>" +
-                                        "#" + post.get( "id" ) + " > " + post.get( "title" ) + " [" + post.get( "date" ) + "] " +
-                                        "</a>" +
-                                        "</li>"
-                                );
-                            }
-                    );
                 };
 
                 // Loading screen simulé
@@ -138,7 +80,7 @@
                 setTimeout( main, 1000 );
 
             });
-        })(jQuery, Backbone);
+        })(jQuery, rl);
     </script>
 </head>
 <body>
