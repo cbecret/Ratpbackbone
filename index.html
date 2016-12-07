@@ -3,14 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Panne de signalisation</title>
-</head>
-<body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
+
     <script>
-        (function($)
+        (function( $, Backbone )
         {
-            // Données relatives aux posts
+            // Données et models
+            /* Post { id:1, title:"example", date:"01/01/1990", content:"Example", img:"example.jpg"} */
+            var PostModel = Backbone.Model.extend
+            (
+                    {
+                        defaults:
+                        {
+                            title:"",
+                            date:"01/01/2000",
+                            content:"",
+                            img:"default.jpg"
+                        }
+                    }
+            );
+            /* PostCollection */
+            var PostsCollection = Backbone.Collection.extend(
+                    {
+                        model : PostModel
+                    }
+            );
+
+            // Données mockups correspondant à la liste des posts
             var posts;
 
             /**
@@ -20,26 +41,53 @@
                 /**
                  * Données provenant du serveur
                  */
-                var main = function(){
-                    // Liste de donnée en JSON
-                    posts = [
-                        {   id:1,
-                            title:"La vie connectée",
-                            date:"05/12/2016",
-                            content:"En raison d'une rame de passagers laissée à l'abandon sur les voies, la ligne 13 sera temporairement suspendue jusqu'a nouvel ordre.\n De même nous vous annonçons une nouvelle augmentation du tarif du pass navigo.",
-                            img:"rame_abandon.jpg"
-                        },
-                        {   id:2,
-                            title:"La vie connectée",
-                            date:"06/12/2016",
-                            content:"En raison du trop grand nombre de rats sur les quais et les voies, nous activons notre système de prévention anti-domestication et coupons la ligne 1 dans les deux sens. L'avis de notre expert sur le terrain : 'Contrairement aux chatons, les rats sont de petits animaux dangereux et ne doivent en aucun cas être carréssés, nourris ou adoptés. Vous risquriez 3750€ d'amendes et 30 jours au bagne de cayennes.' - Amélie B., Expert faune & flore à la RATP",
-                            img:"vin_canard.jpg"
-                        }
-                    ]
-                }
-            })
-        })()
-    </script>
+                var main = function()
+                {
+                    posts = new PostsCollection();
+                    posts.add( new PostModel({
+                        id:1,
+                        title:"La vie connectée",
+                        date:"05/12/2016",
+                        content:"En raison d'une rame de passagers laissée à l'abandon sur les voies, la ligne 13 sera temporairement suspendue jusqu'a nouvel ordre.\n De même nous vous annonçons une nouvelle augmentation du tarif du pass navigo.",
+                        img:"rame_abandon.jpg"
+                    }));
+                    posts.add( new PostModel({
+                        id:2,
+                        title:"La vie connectée",
+                        date:"06/12/2016",
+                        content:"En raison du trop grand nombre de rats sur les quais et les voies, nous activons notre système de prévention anti-domestication et coupons la ligne 1 dans les deux sens. L'avis de notre expert sur le terrain : 'Contrairement aux chatons, les rats sont de petits animaux dangereux et ne doivent en aucun cas être carréssés, nourris ou adoptés. Vous risquriez 3750€ d'amendes et 30 jours au bagne de cayennes.' - Amélie B., Expert faune & flore à la RATP",
+                        img:"vin_canard.jpg"
+                    }));
 
+                    // Desactiver le message de chargement
+                    $('#loading').remove();
+
+                    // Met à jour les éléments de la liste
+                    var $post_list = $('#post_list');
+                    posts.each
+                    (
+                            function( post )
+                            {
+                                $post_list.append(
+                                        "<li><a href='post.php?id="+ post.get( "id" ) +"'>"+
+                                        post.get( "title" ) + " "+ post.get( "date" ) +
+                                        "</a>" +
+                                        "</li>"
+                                );
+                            }
+                    );
+                };
+
+                // Loading screen simulé
+                $( "body" ).append( "<h1 id='loading'>Merci de patienter pendant que Lycos va chercher le contenu</h1>" );
+                // Active une pseudo requête async HTTP
+                setTimeout( main, 2000 );
+
+            });
+        })(jQuery, Backbone);
+    </script>
+</head>
+<body>
+    <ul id="post_list"></ul>
 </body>
 </html>
