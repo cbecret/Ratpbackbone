@@ -3,9 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Panne de signalisation</title>
+    <!-- Chargement des dépendances : Lodash||Underscore DEPENDANCE FORTE ! -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
+
+    <!--Templates-->
+    <script type="text/template" id="contact-template">
+        <li>
+            <a href='contact.php?id=<%= id %>'>
+                <img src="img/<%= img %>" alt="<%= title %>">
+                <%= id %> <%= title %> <%= date %>
+            </a>
+        </li>
+    </script>
 
     <script>
         (function( $, Backbone )
@@ -31,6 +42,38 @@
                     }
             );
 
+            // Vues
+            var PostView = Backbone.View.extend(
+                    {
+                        tagName : "li"
+                    }
+            );
+            var PostListView = Backbone.View.extend(
+                    {
+                        collection: null,
+                        template: _.template( $( "#post-template" ).html() ),
+                        initialize: function()
+                        {
+                            this.listenTo( this.collection, "add", this.render );
+                            this.render();
+                        },
+                        render: function()
+                        {
+                            var self = this;
+                            this.$el.empty();
+                            this.collection.each(
+                                    function( post )
+                                    {
+                                        self.$el.append(
+                                                self.template( post.toJSON() )
+                                        )
+                                        console.log(post.toJSON());
+                                    }
+                            )
+                        }
+                    }
+            )
+
             // Données mockups correspondant à la liste des posts
             var posts;
 
@@ -44,6 +87,16 @@
                 var main = function()
                 {
                     posts = new PostsCollection();
+
+                    // Renseigne les éléments de la liste
+                    var postListView = new PostListView
+                    (
+                            {
+                                el: "#post_list",
+                                collection: posts
+                            }
+                    );
+
                     posts.add( new PostModel({
                         id:1,
                         title:"La vie connectée",
