@@ -69,8 +69,9 @@
                             function( post )
                             {
                                 $post_list.append(
-                                        "<li><a href='post.php?id="+ post.get( "id" ) +"'>"+
-                                        post.get( "title" ) + " "+ post.get( "date" ) +
+                                        "<li>" +
+                                        "<a href='post.php?id="+ post.get( "id" ) +"'>" +
+                                        "#" + post.get( "id" ) + " > " + post.get( "title" ) + " [" + post.get( "date" ) + "] " +
                                         "</a>" +
                                         "</li>"
                                 );
@@ -81,7 +82,7 @@
                 // Loading screen simulé
                 $( "body" ).append( "<h1 id='loading'>Merci de patienter pendant que Lycos va chercher le contenu</h1>" );
                 // Active une pseudo requête async HTTP
-                setTimeout( main, 2000 );
+                setTimeout( main, 1000 );
 
             });
         })(jQuery, Backbone);
