@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Panne de signalisation</title>
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script>
+        (function($)
+        {
+            // Données relatives aux posts
+            var posts;
+
+            /**
+             * Document ready event
+             */
+            $( function(){
+                /**
+                 * Données provenant du serveur
+                 */
+                var main = function(){
+                    // Liste de donnée en JSON
+                    posts = [
+                        {   id:1,
+                            title:"La vie connectée",
+                            date:"05/12/2016",
+                            content:"En raison d'une rame de passagers laissée à l'abandon sur les voies, la ligne 13 sera temporairement suspendue jusqu'a nouvel ordre.\n De même nous vous annonçons une nouvelle augmentation du tarif du pass navigo.",
+                            img:"rame_abandon.jpg"
+                        },
+                        {   id:2,
+                            title:"La vie connectée",
+                            date:"06/12/2016",
+                            content:"En raison du trop grand nombre de rats sur les quais et les voies, nous activons notre système de prévention anti-domestication et coupons la ligne 1 dans les deux sens. L'avis de notre expert sur le terrain : 'Contrairement aux chatons, les rats sont de petits animaux dangereux et ne doivent en aucun cas être carréssés, nourris ou adoptés. Vous risquriez 3750€ d'amendes et 30 jours au bagne de cayennes.' - Amélie B., Expert faune & flore à la RATP",
+                            img:"vin_canard.jpg"
+                        }
+                    ]
+                }
+            })
+        })()
+    </script>
+
+</body>
+</html>
